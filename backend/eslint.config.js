@@ -4,7 +4,7 @@ import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'node_modules/**', '*.config.js'],
+    ignores: ['dist/**', 'node_modules/**', '*.config.js', 'prisma.config.ts'],
   },
   js.configs.recommended,
   // Config for source files (excluding tests)
@@ -31,7 +31,7 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
-  // Config for test files and config files
+  // Config for test files
   ...tseslint.configs.recommendedTypeChecked,
   {
     files: ['**/*.test.ts', '**/__tests__/**', 'vitest.config.ts'],
