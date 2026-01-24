@@ -40,3 +40,6 @@ Icon?
 
 # ---- Tests artifacts ----
 *.lcov
+
+# ---- Docker
+docker-compose.override.yml

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  local_db_postgres:
+    image: postgres:15-alpine
+    container_name: SlotWise-database-container
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: slotwise_dev
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d slotwise_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
+    driver: local
