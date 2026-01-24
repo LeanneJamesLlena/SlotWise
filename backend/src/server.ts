@@ -9,13 +9,12 @@ const startServer = async (): Promise<void> => {
 
     app.listen(env.PORT, () => {
       console.log(`Server is running on port ${env.PORT}`);
-    })
-    
+    });
   } catch (error) {
     console.error('Server startup error:', error);
     process.exit(1);
   }
-}
+};
 
 startServer().catch((error) => {
   console.error('Failed to start server:', error);
