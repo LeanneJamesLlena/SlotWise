@@ -7,8 +7,11 @@ export default tseslint.config(
     ignores: ['dist/**', 'node_modules/**', '*.config.js'],
   },
   js.configs.recommended,
+  // Config for source files (excluding tests)
   ...tseslint.configs.recommendedTypeChecked,
   {
+    files: ['src/**/*.ts'],
+    ignores: ['src/**/*.test.ts', 'src/**/__tests__/**'],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -28,5 +31,27 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
-  prettierConfig // Add this to disable conflicting rules
+  // Config for test files and config files
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    files: ['**/*.test.ts', '**/__tests__/**', 'vitest.config.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.test.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'no-console': 'off', // Allow console in tests
+    },
+  },
+  prettierConfig
 );
