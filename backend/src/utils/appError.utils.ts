@@ -15,7 +15,12 @@ class AppError extends Error {
         this.isOperational = isOperational;
         Error.captureStackTrace(this, this.constructor);
     }
+    
+    // add factory methods later for common errors 
+    static badRequest(message: string, errors?: unknown): AppError {
+        return new AppError(message, 400, errors);
+    }
 };
-// add factory methods later for common errors 
+
 
 export default AppError;
