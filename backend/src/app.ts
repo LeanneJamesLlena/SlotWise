@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import errorHandler  from '@/middleware/error.middleware.js';
+import notFoundHandler from '@/middleware/notFound.middleware.js';
 import { env } from '@/config/env.js';
 import type { Request, Response, NextFunction } from 'express';
 
@@ -53,25 +55,14 @@ export const authLimiter = rateLimit({
 app.use('/api', apiLimiter);
 // use authLimiter for auth routes
 // Health check endpoint
-app.get('/health', (_req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response, _next: NextFunction) => {
   res.status(200).json({
     status: 'OK',
     date: new Date().toISOString(),
   });
 });
 
-/*
-// Error handling middleware
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({
-    error: env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-// 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ error: 'Not found' });
-});
-*/
 export default app;
