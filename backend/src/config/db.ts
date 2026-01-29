@@ -21,14 +21,11 @@ export const connectDB = async () => {
   }
 };
 
-export const disconnectDB = async () => {
+export const disconnectDB = async (): Promise<void> => {
   try {
     await prisma.$disconnect();
     console.log('DB disconnected via Prisma');
-    
   } catch (error) {
     console.error('DB disconnection error:', error);
-    throw error;
-    
   }
-}
+};

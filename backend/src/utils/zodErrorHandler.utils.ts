@@ -1,15 +1,13 @@
-import { ZodError } from 'zod';
+import type { ZodError } from 'zod';
 import AppError from '@/utils/appError.utils.js';
 
-
 export const zodErrorHandler = (error: ZodError): AppError => {
-    const errors = error.issues.map((err) => ({
-        field: err.path.join("."),
-        message: err.message,
-    }));
+  const errors = error.issues.map((err) => ({
+    field: err.path.join('.'),
+    message: err.message,
+  }));
 
-    return AppError.badRequest('Validation failed', errors);
-
+  return AppError.badRequest('Validation failed', errors);
 };
 /*example use:
 validate with zod:

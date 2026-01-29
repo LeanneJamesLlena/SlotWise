@@ -3,12 +3,10 @@ import { env } from '@/config/env.js';
 import app from '@/app.js';
 import { connectDB, disconnectDB } from '@/config/db.js';
 
-
 let server: ReturnType<typeof app.listen> | undefined;
 let shutDownTimer: NodeJS.Timeout | undefined;
 let isShuttingDown = false;
 const SHUTDOWN_TIMEOUT = 10000;
-
 
 const gracefulShutdown = async (signal: string, error?: unknown): Promise<void> => {
   if (isShuttingDown) return;
@@ -26,20 +24,21 @@ const gracefulShutdown = async (signal: string, error?: unknown): Promise<void> 
   } else {
     console.log(`${signal} - Shutting down gracefully`);
   }
+
   try {
     if (server) {
       await new Promise<void>((resolve, reject) => {
-        server!.close((error) => {
-          if (error) {
-            console.error('Error closing HTTP server:', error);
-            reject(error);
+        server!.close((closeError) => {
+          if (closeError) {
+            console.error('Error closing HTTP server:', closeError);
+            reject(closeError);
           } else {
             console.log('HTTP server closed');
             resolve();
           }
-        })
-      })
-    };
+        });
+      });
+    }
 
     await disconnectDB();
 
@@ -49,11 +48,15 @@ const gracefulShutdown = async (signal: string, error?: unknown): Promise<void> 
     process.exit(error ? 1 : 0);
   } catch (shutdownError) {
     console.error('Error during shutdown:', shutdownError);
+    try {
+      await disconnectDB();
+    } catch (dbError) {
+      console.error('Error disconnecting DB during error shutdown:', dbError);
+    }
     if (shutDownTimer) clearTimeout(shutDownTimer);
     process.exit(1);
   }
-
-}
+};
 
 const startServer = async (): Promise<void> => {
   try {
@@ -70,26 +73,26 @@ const startServer = async (): Promise<void> => {
         console.error(`Server error:`, error);
       }
       console.error('Exiting..');
-      gracefulShutdown('serverError', error);
+      void gracefulShutdown('serverError', error);
     });
-
   } catch (error) {
     console.error('Failed to start server', error);
     await gracefulShutdown('startServer', error);
-  };
-}
+  }
+};
 
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => {
+  void gracefulShutdown('SIGINT');
+});
+process.on('SIGTERM', () => {
+  void gracefulShutdown('SIGTERM');
+});
 
 process.on('unhandledRejection', (reason) => {
-  gracefulShutdown('unhandledRejection', reason);
+  void gracefulShutdown('unhandledRejection', reason);
 });
 process.on('uncaughtException', (error) => {
-  gracefulShutdown('uncaughtException', error);
+  void gracefulShutdown('uncaughtException', error);
 });
 
-
-
-
-startServer();
+void startServer();

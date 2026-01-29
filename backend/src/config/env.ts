@@ -9,7 +9,6 @@ const envSchema = z.object({
   DIRECT_URL: z.string().url().optional(),
 });
 
-
 if (!process.env.DIRECT_URL && process.env.DATABASE_URL) {
   process.env.DIRECT_URL = process.env.DATABASE_URL;
 }
