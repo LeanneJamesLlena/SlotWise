@@ -17,6 +17,18 @@ export const connectDB = async () => {
     console.log('DB connected via Prisma');
   } catch (error) {
     console.error('DB connection error:', error);
-    process.exit(1);
+    throw error;
   }
 };
+
+export const disconnectDB = async () => {
+  try {
+    await prisma.$disconnect();
+    console.log('DB disconnected via Prisma');
+    
+  } catch (error) {
+    console.error('DB disconnection error:', error);
+    throw error;
+    
+  }
+}
