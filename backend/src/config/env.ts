@@ -6,7 +6,6 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(4000),
 
   DATABASE_URL: z.string().min(1),
-  DIRECT_URL: z.string().url().optional(),
 });
 
 if (!process.env.DIRECT_URL && process.env.DATABASE_URL) {
