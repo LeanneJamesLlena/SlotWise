@@ -43,3 +43,6 @@ Icon?
 
 # ---- Docker
 docker-compose.override.yml
+
+# files
+exampless/

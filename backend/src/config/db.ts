@@ -14,9 +14,18 @@ export const prisma = new PrismaClient({
 export const connectDB = async () => {
   try {
     await prisma.$connect();
-    console.log('DB conneted via Prisma');
+    console.log('DB connected via Prisma');
   } catch (error) {
     console.error('DB connection error:', error);
-    process.exit(1);
+    throw error;
+  }
+};
+
+export const disconnectDB = async (): Promise<void> => {
+  try {
+    await prisma.$disconnect();
+    console.log('DB disconnected via Prisma');
+  } catch (error) {
+    console.error('DB disconnection error:', error);
   }
 };

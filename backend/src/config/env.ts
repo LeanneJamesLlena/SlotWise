@@ -8,4 +8,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
 });
 
+if (!process.env.DIRECT_URL && process.env.DATABASE_URL) {
+  process.env.DIRECT_URL = process.env.DATABASE_URL;
+}
+
 export const env = envSchema.parse(process.env);
