@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "tsx watch --env-file=.env src/server.ts",
-    "build": "tsc --noEmitOnError && tsc-alias",
+    "build": "tsc --noEmitOnError && npx tsc-alias",
     "build:prod": "prisma -v && npm run db:generate && npm run db:migrate:deploy && npm run build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
