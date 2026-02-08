@@ -57,6 +57,7 @@ jobs:
         working-directory: ./backend
     env:
       DATABASE_URL: postgresql://test:test@localhost:5432/test
+      DIRECT_URL: postgresql://test:test@localhost:5432/test
       NODE_ENV: test
     services:
       postgres:
