@@ -46,3 +46,5 @@ docker-compose.override.yml
 
 # files
 exampless/
+# Prisma v7 generated client (custom output)
+src/generated/prisma/
