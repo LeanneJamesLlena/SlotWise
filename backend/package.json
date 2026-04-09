@@ -39,7 +39,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@prisma/client": "6.19.0",
+    "@prisma/client": "7.4.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/eslint": "^9.6.1",
